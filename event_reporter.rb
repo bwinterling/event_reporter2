@@ -63,7 +63,7 @@ class EventReporter
       @queue = @attendee_data
     else
       attribute = parts[0].downcase.to_sym
-      criteria = parts[1].downcase
+      criteria = parts[1..-1].join(" ").downcase
       @attendee_data.each do |row|
         if row[attribute].downcase == criteria
           @queue << row

@@ -53,12 +53,39 @@ class Queue
     count_queue
   end
 
+  def column_widths
+    col_last = [10]
+    col_first = [10]
+    col_email = [20]
+    col_city = [10]
+    col_str = [20]
+    padding = 2
+
+    @event_reporter.queue.each do |row|
+      col_last << row[:last_name].length
+      col_first << row[:first_name].length
+      col_email << row[:email_address].length
+      col_city << row[:city].length
+      col_str << row[:street].length
+    end
+
+    @col1 = col_last.max + padding
+    @col2 = col_first.max + padding
+    @col3 = col_email.max + padding
+    @col4 = 9
+    @col5 = col_city.max + padding
+    @col6 = 7
+    @col7 = col_str.max + padding
+    @col8 = 13
+  end
+
   def print_queue
-    @print_count = 0
-    puts "LAST NAME".ljust(15) + " | " + "FIRST NAME".ljust(12) + " | " + "EMAIL".ljust(45) + " | " + "ZIPCODE".ljust(10) + " | " + "CITY".ljust(30) + " | " + "STATE".ljust(6) + " | " + "ADDRESS".ljust(50) + " | " + "PHONE".ljust(14)
+    column_widths #sets column widths to longest record in column
+    @print_count = 0 #print count is for testing, to compare with queue count
+    puts "LAST NAME".ljust(@col1) + " | " + "FIRST NAME".ljust(@col2) + " | " + "EMAIL".ljust(@col3) + " | " + "ZIPCODE".ljust(@col4) + " | " + "CITY".ljust(@col5) + " | " + "STATE".ljust(@col6) + " | " + "ADDRESS".ljust(@col7) + " | " + "PHONE".ljust(@col8)
     @event_reporter.queue.each do |row|
       @print_count += 1
-      puts row[:last_name].ljust(15) +  " | " + row[:first_name].ljust(12) + " | " + row[:email_address].ljust(45) + " | " + row[:zipcode].ljust(10) + " | " + row[:city].ljust(30) + " | " + row[:state].ljust(6) + " | " + row[:street].ljust(50) + " | " + row[:homephone].ljust(14)
+      puts row[:last_name].ljust(@col1) +  " | " + row[:first_name].ljust(@col2) + " | " + row[:email_address].ljust(@col3) + " | " + row[:zipcode].ljust(@col4) + " | " + row[:city].ljust(@col5) + " | " + row[:state].ljust(@col6) + " | " + row[:street].ljust(@col7) + " | " + row[:homephone].ljust(@col8)
     end
   end
 
