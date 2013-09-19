@@ -2,8 +2,15 @@ require 'csv'
 
 class Queue
 
+  attr_accessor :print_count
+
+  def print_count
+    @print_count
+  end
+
   def initialize(event_reporter)
     @event_reporter = event_reporter
+    @print_count = 0
   end
 
   def which_queue(parts)
@@ -47,8 +54,10 @@ class Queue
   end
 
   def print_queue
+    @print_count = 0
     puts "LAST NAME".ljust(15) + " | " + "FIRST NAME".ljust(12) + " | " + "EMAIL".ljust(45) + " | " + "ZIPCODE".ljust(10) + " | " + "CITY".ljust(30) + " | " + "STATE".ljust(6) + " | " + "ADDRESS".ljust(50) + " | " + "PHONE".ljust(14)
     @event_reporter.queue.each do |row|
+      @print_count += 1
       puts row[:last_name].ljust(15) +  " | " + row[:first_name].ljust(12) + " | " + row[:email_address].ljust(45) + " | " + row[:zipcode].ljust(10) + " | " + row[:city].ljust(30) + " | " + row[:state].ljust(6) + " | " + row[:street].ljust(50) + " | " + row[:homephone].ljust(14)
     end
   end

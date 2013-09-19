@@ -59,11 +59,15 @@ class EventReporter
 
   def find_records(parts)
     @queue.clear
-    attribute = parts[0].downcase.to_sym
-    criteria = parts[1].downcase
-    @attendee_data.each do |row|
-      if row[attribute].downcase == criteria
-        @queue << row
+    if parts[0] == 'all' 
+      @queue = @attendee_data
+    else
+      attribute = parts[0].downcase.to_sym
+      criteria = parts[1].downcase
+      @attendee_data.each do |row|
+        if row[attribute].downcase == criteria
+          @queue << row
+        end
       end
     end
   end
@@ -71,5 +75,5 @@ class EventReporter
 # end of EventReporter Class
 end
 
-reporter = EventReporter.new
-reporter.run
+# reporter = EventReporter.new
+# reporter.run
