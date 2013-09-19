@@ -71,5 +71,5 @@ class EventReporter
 # end of EventReporter Class
 end
 
-# reporter = EventReporter.new
-# reporter.run
+reporter = EventReporter.new
+reporter.run

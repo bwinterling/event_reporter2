@@ -1,3 +1,5 @@
+require 'csv'
+
 class Queue
 
   def initialize(event_reporter)
@@ -9,12 +11,27 @@ class Queue
     case command
       when "count"  then count_queue
       when "clear"  then clear_queue
-      when "print"  then print_queue
-     # queue print by attribute
-     # queue save to filename.csv
-    else
-      puts "Sorry, I don't know to queue #{command}"
+      when "print" 
+        if parts[1] == 'by'
+          @event_reporter.queue = @event_reporter.queue.sort_by { |row| row[parts[2].to_sym] }
+          print_queue
+        else
+          print_queue
+        end
+      when "save"   then save_queue(parts[2])
+      else
+        puts "Sorry, I don't know to queue #{command}"
     end
+  end
+
+  def save_queue(filename)
+    CSV.open(filename,'w') do |row|
+      row << %w"id regdate first_name last_name email_address homephone street city state zipcode"
+      @event_reporter.queue.each do |queue_row|
+        row << [queue_row[:id], queue_row[:regdate].to_s, queue_row[:first_name].to_s.capitalize, queue_row[:last_name].to_s.capitalize, queue_row[:email_address].to_s, queue_row[:homephone].to_s, queue_row[:street].to_s, queue_row[:city].to_s, queue_row[:state].to_s, queue_row[:zipcode].to_s]
+      end
+    end
+    puts "\nYour queue is now a fancy CSV file called #{filename}."
   end
 
   def count_queue

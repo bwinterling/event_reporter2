@@ -15,7 +15,7 @@ class Helper
       when "queue print"
         text = "\nPrints current queue.\nEnter 'queue print <attribute>' to sort list on attribute."
       when "queue save"
-        text = "\nSaves current queue to FILENAME.csv."
+        text = "\nSaves current queue to FILENAME.csv.\nSYNTAX: queue save to <filename>"
     else
       text = "\n\nI'd help you '#{command}', if I knew what '#{command}' meant.\n\n"
     end
@@ -39,6 +39,8 @@ class Helper
     queue clear               :: Clears the queue
     queue count               :: Count records in the queue
     queue print               :: Prints the queue
+    queue print by <attr>     :: Prints by <attribute>
+    queue save to <file>      :: Creates CSV from queue and saves as <filename>
     help                      :: View help information
     
     """
