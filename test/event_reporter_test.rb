@@ -62,11 +62,10 @@ class EventReporterTest < MiniTest::Test
   end
 
   def test_queue_print
-    queue = Queue.new(@reporter)
     @reporter.process_command("load")
     @reporter.process_command("find first_name John")
     @reporter.process_command("queue print") 
-    assert queue.print_count, @reporter.queue_count
+    assert @reporter.print_count, @reporter.queue_count
   end
 
   def test_queue_save

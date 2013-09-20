@@ -6,15 +6,11 @@ require './helper.rb'
 class EventReporter
 
   attr_reader :attendee_data
-  attr_accessor :queue
+  attr_accessor :queue, :print_count
   
   def initialize
     puts 'Initializing Event Reporter'
     @queue = []
-  end
-
-  def queue_count
-    @queue.count
   end
 
   def run
@@ -36,7 +32,7 @@ class EventReporter
       when "q"          then puts "\n\nGoodbye!"
       when "load"       then load_file(parts[1])
       when "find"       then find_records(parts[1..-1])
-      when "queue"      then Queue.new(self).which_queue(parts[1..-1])
+      when "queue"      then Queue.new(self).which_queue_command(parts[1..-1])
     else
       puts "\nSorry, I don't know to #{command}.\nYou can #{command} on your own time."
     end
@@ -44,7 +40,7 @@ class EventReporter
   end
 
   def call_helper(parts)
-    text = Helper.new.which_help(parts)
+    text = Helper.new.which_help_command(parts)
     puts text
   end
 
@@ -72,8 +68,12 @@ class EventReporter
     end
   end
 
+  def queue_count
+    @queue.count
+  end
+
 # end of EventReporter Class
 end
 
-# reporter = EventReporter.new
-# reporter.run
+reporter = EventReporter.new
+reporter.run

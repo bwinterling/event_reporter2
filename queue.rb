@@ -2,30 +2,22 @@ require 'csv'
 
 class Queue
 
-  attr_accessor :print_count
-
-  def print_count
-    @print_count
-  end
-
   def initialize(event_reporter)
     @event_reporter = event_reporter
-    @print_count = 0
   end
 
-  def which_queue(parts)
+  def which_queue_command(parts)
     command = parts[0]
     case command
-      when "count"  then count_queue
-      when "clear"  then clear_queue
+      when "count"
+        count_the_queue
+      when "clear"
+        clear_the_queue
       when "print" 
-        if parts[1] == 'by'
-          @event_reporter.queue = @event_reporter.queue.sort_by { |row| row[parts[2].to_sym] }
-          print_queue
-        else
-          print_queue
-        end
-      when "save"   then save_queue(parts[2])
+        printer = PrintQueue.new(@event_reporter)
+        printer.which_print_command(parts[1..-1])
+      when "save"
+        save_queue(parts[2])
       else
         puts "Sorry, I don't know to queue #{command}"
     end
@@ -41,19 +33,38 @@ class Queue
     puts "\nYour queue is now a fancy CSV file called #{filename}."
   end
 
-  def count_queue
+  def count_the_queue
     # @queue_count = 0 if @queue.count.nil? else @queue_count = @queue.count
     count = @event_reporter.queue_count
     puts "There are #{count} records in the queue."
     count
   end
 
-  def clear_queue
+  def clear_the_queue
     @event_reporter.queue.clear
     count_queue
   end
 
-  def column_widths
+#end of Queue class
+end
+
+class PrintQueue
+
+  def initialize(event_reporter)
+    @event_reporter = event_reporter
+    @event_reporter.print_count = 0
+  end
+
+  def which_print_command(parts)
+    if parts[0] == 'by'
+      @event_reporter.queue = @event_reporter.queue.sort_by { |row| row[parts[1].to_sym] }
+      print_to_screen
+    else
+      print_to_screen
+    end
+  end
+
+  def set_column_widths_to_longest_record
     col_last = [10]
     col_first = [10]
     col_email = [20]
@@ -79,15 +90,15 @@ class Queue
     @col8 = 13
   end
 
-  def print_queue
-    column_widths #sets column widths to longest record in column
-    @print_count = 0 #print count is for testing, to compare with queue count
+  def print_to_screen
+    set_column_widths_to_longest_record 
+    @event_reporter.print_count = 0 #print count is for testing, to compare with queue count
     puts "LAST NAME".ljust(@col1) + " | " + "FIRST NAME".ljust(@col2) + " | " + "EMAIL".ljust(@col3) + " | " + "ZIPCODE".ljust(@col4) + " | " + "CITY".ljust(@col5) + " | " + "STATE".ljust(@col6) + " | " + "ADDRESS".ljust(@col7) + " | " + "PHONE".ljust(@col8)
     @event_reporter.queue.each do |row|
-      @print_count += 1
+      @event_reporter.print_count += 1
       puts row[:last_name].ljust(@col1) +  " | " + row[:first_name].ljust(@col2) + " | " + row[:email_address].ljust(@col3) + " | " + row[:zipcode].ljust(@col4) + " | " + row[:city].ljust(@col5) + " | " + row[:state].ljust(@col6) + " | " + row[:street].ljust(@col7) + " | " + row[:homephone].ljust(@col8)
     end
   end
-
-#end of Queue class
+# end of PrintQueue class
 end
+

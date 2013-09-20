@@ -6,7 +6,7 @@ class Helper
     @help_string = ""
   end
 
-  def which_help(parts)
+  def which_help_command(parts)
     command = parts[1..-1].join(" ").to_s
     case command
       when ""       then help
@@ -25,7 +25,7 @@ class Helper
     else
       @help_string = "\n\nI'd help you '#{command}', if I knew what '#{command}' meant.\n\n"
     end
-    putser
+    puts_help_string_to_terminal
   end
 
   def help
@@ -54,7 +54,7 @@ class Helper
     '
   end
 
-  def putser
+  def puts_help_string_to_terminal
     puts @help_string
   end
 
